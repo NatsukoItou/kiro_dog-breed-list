@@ -112,7 +112,7 @@ export interface UseFavoritesReturn {
 
 export interface UseLocalStorageReturn<T> {
   value: T;
-  setValue: (value: T) => void;
+  setValue: (value: T | ((prev: T) => T)) => void;
   removeValue: () => void;
 }
 

@@ -1,39 +1,41 @@
 import { useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
+import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import type { UserPreferences, UseUserPreferencesReturn } from '../types';
 
 /**
  * ユーザー設定を管理するカスタムフック
+ * 関数型更新を使用してパフォーマンスを最適化
  */
 export function useUserPreferences(): UseUserPreferencesReturn {
   const { value: preferences, setValue: setPreferences } = useLocalStorage<UserPreferences>(
-    'dogApp.preferences',
+    LOCAL_STORAGE_KEYS.PREFERENCES,
     {}
   );
 
-  // 最後に選択した犬種を保存
+  // 最後に選択した犬種を保存（関数型更新を使用）
   const setLastSelectedBreed = useCallback((breed: string | null) => {
-    setPreferences({
-      ...preferences,
+    setPreferences(prev => ({
+      ...prev,
       lastSelectedBreed: breed || undefined,
-    });
-  }, [preferences, setPreferences]);
+    }));
+  }, [setPreferences]);
 
-  // テーマを設定
+  // テーマを設定（関数型更新を使用）
   const setTheme = useCallback((theme: 'light' | 'dark') => {
-    setPreferences({
-      ...preferences,
+    setPreferences(prev => ({
+      ...prev,
       theme,
-    });
-  }, [preferences, setPreferences]);
+    }));
+  }, [setPreferences]);
 
-  // 画像サイズを設定
+  // 画像サイズを設定（関数型更新を使用）
   const setImageSize = useCallback((size: 'small' | 'medium' | 'large') => {
-    setPreferences({
-      ...preferences,
+    setPreferences(prev => ({
+      ...prev,
       imageSize: size,
-    });
-  }, [preferences, setPreferences]);
+    }));
+  }, [setPreferences]);
 
   // 設定をリセット
   const resetPreferences = useCallback(() => {

@@ -3,6 +3,7 @@
  * 開発時にブラウザのコンソールで実行して動作確認可能
  */
 
+import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import type { DogImage, UserPreferences } from '../types';
 
 // テスト用のサンプルデータ
@@ -52,7 +53,7 @@ export function testFavoritesStorage() {
   console.log('=== お気に入り機能テスト ===');
   
   try {
-    const key = 'dogApp.favorites';
+    const key = LOCAL_STORAGE_KEYS.FAVORITES;
     
     // 初期状態の確認
     const initial = localStorage.getItem(key);
@@ -63,14 +64,22 @@ export function testFavoritesStorage() {
     localStorage.setItem(key, JSON.stringify(favorites));
     console.log('✓ お気に入り追加: 成功');
     
-    // お気に入りの読み込み
+    // お気に入りの読み込み（Date型の復元テスト）
     const stored = localStorage.getItem(key);
     const parsedFavorites: DogImage[] = stored ? JSON.parse(stored) : [];
-    console.log('✓ お気に入り読み込み:', parsedFavorites);
+    
+    // Date文字列をDateオブジェクトに変換
+    const favoritesWithDates = parsedFavorites.map(fav => ({
+      ...fav,
+      addedAt: new Date(fav.addedAt)
+    }));
+    
+    console.log('✓ お気に入り読み込み:', favoritesWithDates);
+    console.log('✓ Date型復元確認:', favoritesWithDates[0]?.addedAt instanceof Date);
     
     // 複数のお気に入り追加
     const moreFavorites: DogImage[] = [
-      ...parsedFavorites,
+      ...favoritesWithDates,
       {
         ...sampleDogImage,
         id: 'test-image-2',
@@ -97,7 +106,7 @@ export function testPreferencesStorage() {
   console.log('=== ユーザー設定テスト ===');
   
   try {
-    const key = 'dogApp.preferences';
+    const key = LOCAL_STORAGE_KEYS.PREFERENCES;
     
     // 設定の保存
     localStorage.setItem(key, JSON.stringify(samplePreferences));
@@ -126,6 +135,34 @@ export function testPreferencesStorage() {
 }
 
 /**
+ * Date型のシリアライゼーション問題をテスト
+ */
+export function testDateSerialization() {
+  console.log('=== Date型シリアライゼーションテスト ===');
+  
+  try {
+    const originalDate = new Date();
+    const testObject = { date: originalDate };
+    
+    // JSON化
+    const serialized = JSON.stringify(testObject);
+    console.log('✓ シリアライズ:', serialized);
+    
+    // JSON解析
+    const parsed = JSON.parse(serialized);
+    console.log('✓ デシリアライズ:', parsed);
+    console.log('✓ Date型チェック（解析後）:', parsed.date instanceof Date); // false になる
+    
+    // 手動でDate型に復元
+    const restored = { ...parsed, date: new Date(parsed.date) };
+    console.log('✓ Date型復元:', restored.date instanceof Date); // true になる
+    
+  } catch (error) {
+    console.error('✗ Date型テストでエラー:', error);
+  }
+}
+
+/**
  * 全てのテストを実行
  */
 export function runAllLocalStorageTests() {
@@ -141,6 +178,9 @@ export function runAllLocalStorageTests() {
   testPreferencesStorage();
   console.log('');
   
+  testDateSerialization();
+  console.log('');
+  
   console.log('🎉 全てのテスト完了');
 }
 
@@ -151,5 +191,6 @@ if (typeof window !== 'undefined') {
     basic: testBasicLocalStorage,
     favorites: testFavoritesStorage,
     preferences: testPreferencesStorage,
+    dateSerialization: testDateSerialization,
   };
 }
