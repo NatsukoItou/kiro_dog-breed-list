@@ -112,16 +112,29 @@ export interface UseFavoritesReturn {
 
 export interface UseLocalStorageReturn<T> {
   value: T;
-  setValue: (value: T) => void;
+  setValue: (value: T | ((prev: T) => T)) => void;
   removeValue: () => void;
+}
+
+export interface UseUserPreferencesReturn {
+  preferences: UserPreferences;
+  setLastSelectedBreed: (breed: string | null) => void;
+  setTheme: (theme: 'light' | 'dark') => void;
+  setImageSize: (size: 'small' | 'medium' | 'large') => void;
+  resetPreferences: () => void;
 }
 
 // ローカルストレージ型
 export interface LocalStorageData {
   favorites: DogImage[];
-  preferences: {
-    lastSelectedBreed?: string;
-  };
+  preferences: UserPreferences;
+}
+
+// ユーザー設定型
+export interface UserPreferences {
+  lastSelectedBreed?: string;
+  theme?: 'light' | 'dark';
+  imageSize?: 'small' | 'medium' | 'large';
 }
 
 // エラー型
