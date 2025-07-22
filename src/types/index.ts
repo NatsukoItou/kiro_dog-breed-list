@@ -18,6 +18,7 @@ export interface DogImage {
 }
 
 export interface DogBreed {
+  id: string;
   name: string;
   subBreeds: string[];
 }
