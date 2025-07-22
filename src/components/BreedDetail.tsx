@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { DogBreed } from '../types';
+import type { DogBreed, DogImage } from '../types';
 import { DogApiService } from '../services/dogApi';
 
 interface BreedDetailProps {
@@ -8,7 +8,7 @@ interface BreedDetailProps {
 }
 
 export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<DogImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +17,8 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
       try {
         setLoading(true);
         setError(null);
-        const imageUrls = await DogApiService.getMultipleBreedImages(breed.id, 3);
-        setImages(imageUrls);
+        const dogImages = await DogApiService.getMultipleBreedImages(breed.id, 3);
+        setImages(dogImages);
       } catch (err) {
         setError(err instanceof Error ? err.message : '画像の取得に失敗しました');
       } finally {
@@ -50,11 +50,11 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
       {error && <div>エラー: {error}</div>}
       {!loading && !error && (
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {images.map((imageUrl, index) => (
+          {images.map((dogImage) => (
             <img
-              key={index}
-              src={imageUrl}
-              alt={`${breed.name} ${index + 1}`}
+              key={dogImage.id}
+              src={dogImage.url}
+              alt={`${breed.name}`}
               style={{ width: '200px', height: '200px', objectFit: 'cover' }}
             />
           ))}
