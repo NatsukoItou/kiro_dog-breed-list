@@ -1,22 +1,22 @@
 import React, { useCallback } from 'react';
 import { RandomDogImage } from '../components/RandomDogImage';
-import { BreedList } from '../components/BreedList';
+import { BreedSelector } from '../components/BreedSelector';
 import { BreedDetail } from '../components/BreedDetail';
 import { useDogBreeds } from '../hooks/useDogBreeds';
 import { useAppState } from '../hooks/useAppState';
-import type { DogBreed } from '../types';
+import type { DogImage } from '../types';
 
 export const HomePage: React.FC = () => {
   const { breeds, loading, error } = useDogBreeds();
-  const { selectedBreed, setSelectedBreed } = useAppState();
-
-  const handleBreedSelect = useCallback((breed: DogBreed) => {
-    setSelectedBreed(breed.name);
-  }, [setSelectedBreed]);
+  const { selectedBreed, setSelectedBreed, setCurrentImage } = useAppState();
 
   const handleBack = useCallback(() => {
     setSelectedBreed(null);
   }, [setSelectedBreed]);
+
+  const handleImageLoad = useCallback((image: DogImage) => {
+    setCurrentImage(image);
+  }, [setCurrentImage]);
 
 
 
@@ -53,11 +53,11 @@ export const HomePage: React.FC = () => {
                 お好みの犬種を選んで画像を見てみましょう
               </p>
             </div>
-            <BreedList
+            <BreedSelector
               breeds={breeds}
-              onBreedSelect={handleBreedSelect}
               loading={loading}
               error={error}
+              onImageLoad={handleImageLoad}
             />
           </section>
         </div>

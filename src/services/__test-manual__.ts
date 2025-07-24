@@ -66,4 +66,12 @@ export async function testDogApiService() {
 }
 
 // Export for manual testing
-(window as any).testDogApiService = testDogApiService;
+declare global {
+  interface Window {
+    testDogApiService: typeof testDogApiService;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.testDogApiService = testDogApiService;
+}

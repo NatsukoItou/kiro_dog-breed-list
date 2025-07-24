@@ -141,7 +141,7 @@ export class DogApiService {
      */
     private static extractBreedFromUrl(url: string): string | undefined {
         try {
-            const match = url.match(/breeds\/([^\/]+)/);
+            const match = url.match(/breeds\/([^/]+)/);
             return match ? match[1] : undefined;
         } catch {
             return undefined;

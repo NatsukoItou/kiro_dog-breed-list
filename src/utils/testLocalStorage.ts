@@ -185,8 +185,20 @@ export function runAllLocalStorageTests() {
 }
 
 // ブラウザのコンソールで使用するためにグローバルに公開
+declare global {
+  interface Window {
+    testLocalStorage: {
+      runAll: typeof runAllLocalStorageTests;
+      basic: typeof testBasicLocalStorage;
+      favorites: typeof testFavoritesStorage;
+      preferences: typeof testPreferencesStorage;
+      dateSerialization: typeof testDateSerialization;
+    };
+  }
+}
+
 if (typeof window !== 'undefined') {
-  (window as any).testLocalStorage = {
+  window.testLocalStorage = {
     runAll: runAllLocalStorageTests,
     basic: testBasicLocalStorage,
     favorites: testFavoritesStorage,

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { useAppContext, actions } from '../context/AppContext';
+import { useAppContext } from './useAppContext';
+import { actions } from '../context/actions';
 import type { DogImage } from '../types';
 
 /**
