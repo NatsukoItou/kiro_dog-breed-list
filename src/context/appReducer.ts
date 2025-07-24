@@ -74,6 +74,12 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         favorites: action.payload,
       };
 
+    case 'CLEAR_ALL_FAVORITES':
+      return {
+        ...state,
+        favorites: [],
+      };
+
     default:
       return state;
   }

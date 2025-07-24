@@ -41,4 +41,8 @@ export const actions = {
     type: 'SET_FAVORITES',
     payload: favorites,
   }),
+
+  clearAllFavorites: (): AppAction => ({
+    type: 'CLEAR_ALL_FAVORITES',
+  }),
 };
