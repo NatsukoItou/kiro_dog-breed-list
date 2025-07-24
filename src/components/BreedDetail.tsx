@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { DogBreed, DogImage } from '../types';
 import { DogApiService } from '../services/dogApi';
+import { Loading } from './Loading';
 
 interface BreedDetailProps {
   breed: DogBreed;
@@ -17,7 +18,7 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
       try {
         setLoading(true);
         setError(null);
-        const dogImages = await DogApiService.getMultipleBreedImages(breed.id, 3);
+        const dogImages = await DogApiService.getMultipleBreedImages(breed.id, 6);
         setImages(dogImages);
       } catch (err) {
         setError(err instanceof Error ? err.message : '画像の取得に失敗しました');
@@ -30,36 +31,52 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
   }, [breed.id]);
 
   return (
-    <div>
-      <button onClick={onBack}>← 戻る</button>
-      <h2>{breed.name}</h2>
-      
-      {breed.subBreeds && breed.subBreeds.length > 0 && (
-        <div>
-          <h3>サブ犬種:</h3>
-          <ul>
-            {breed.subBreeds.map((subBreed) => (
-              <li key={subBreed}>{subBreed}</li>
-            ))}
-          </ul>
+    <div className="card bg-base-100 shadow-xl">
+      <div className="card-body">
+        <div className="flex items-center mb-4">
+          <button onClick={onBack} className="btn btn-circle btn-outline mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 className="card-title text-2xl">{breed.name}</h2>
         </div>
-      )}
+        
+        {breed.subBreeds && breed.subBreeds.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold mb-2">サブ犬種:</h3>
+            <div className="flex flex-wrap gap-2">
+              {breed.subBreeds.map((subBreed) => (
+                <div key={subBreed} className="badge badge-primary badge-lg">{subBreed}</div>
+              ))}
+            </div>
+          </div>
+        )}
 
-      <h3>画像:</h3>
-      {loading && <div>画像を読み込み中...</div>}
-      {error && <div>エラー: {error}</div>}
-      {!loading && !error && (
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {images.map((dogImage) => (
-            <img
-              key={dogImage.id}
-              src={dogImage.url}
-              alt={`${breed.name}`}
-              style={{ width: '200px', height: '200px', objectFit: 'cover' }}
-            />
-          ))}
-        </div>
-      )}
+        <h3 className="text-xl font-semibold mb-4">画像:</h3>
+        {loading && <Loading message="画像を読み込み中..." variant="dots" size="medium" />}
+        {error && (
+          <div className="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>エラー: {error}</span>
+          </div>
+        )}
+        {!loading && !error && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {images.map((dogImage) => (
+              <div key={dogImage.id} className="card bg-base-200">
+                <figure className="p-2">
+                  <img
+                    src={dogImage.url}
+                    alt={`${breed.name}`}
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                </figure>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
