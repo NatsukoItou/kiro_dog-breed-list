@@ -43,6 +43,10 @@ export function useAppState() {
     dispatch(actions.setFavorites(favorites));
   }, [dispatch]);
 
+  const clearAllFavorites = useCallback(() => {
+    dispatch(actions.clearAllFavorites());
+  }, [dispatch]);
+
   // お気に入りチェック用のヘルパー関数
   const isFavorite = useCallback((imageId: string): boolean => {
     return state.favorites.some(fav => fav.id === imageId);
@@ -61,6 +65,7 @@ export function useAppState() {
     addToFavorites,
     removeFromFavorites,
     setFavorites,
+    clearAllFavorites,
     
     // ヘルパー
     isFavorite,

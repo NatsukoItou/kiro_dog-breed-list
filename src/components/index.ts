@@ -8,3 +8,5 @@ export { BreedSelector } from './BreedSelector';
 export { RandomDogImage } from './RandomDogImage';
 export { DogImage } from './DogImage';
 export { ImageControls } from './ImageControls';
+export { FavoritesList } from './FavoritesList';
+export { FavoriteItem } from './FavoriteItem';

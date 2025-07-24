@@ -10,7 +10,7 @@ import type { DogImage, UseFavoritesReturn } from '../types';
  * 状態管理の競合を避けるため、単一の信頼できる情報源を使用
  */
 export function useFavorites(): UseFavoritesReturn {
-  const { favorites, setFavorites, addToFavorites: addToState, removeFromFavorites: removeFromState } = useAppState();
+  const { favorites, setFavorites, addToFavorites: addToState, removeFromFavorites: removeFromState, clearAllFavorites: clearAllFromState } = useAppState();
   
   // ローカルストレージからお気に入りを管理
   const { value: storedFavorites, setValue: setStoredFavorites } = useLocalStorage<DogImage[]>(
@@ -32,10 +32,8 @@ export function useFavorites(): UseFavoritesReturn {
 
   // アプリケーション状態の変更をローカルストレージに同期
   useEffect(() => {
-    if (favorites.length > 0 || storedFavorites.length > 0) {
-      setStoredFavorites(favorites);
-    }
-  }, [favorites, setStoredFavorites, storedFavorites.length]);
+    setStoredFavorites(favorites);
+  }, [favorites, setStoredFavorites]);
 
   // お気に入りに追加（単一の信頼できる情報源を使用）
   const addToFavorites = useCallback((image: DogImage) => {
@@ -45,7 +43,17 @@ export function useFavorites(): UseFavoritesReturn {
   // お気に入りから削除（単一の信頼できる情報源を使用）
   const removeFromFavorites = useCallback((imageId: string) => {
     removeFromState(imageId);
-  }, [removeFromState]);
+    // 削除後の状態を即座にローカルストレージに反映
+    const updatedFavorites = favorites.filter(fav => fav.id !== imageId);
+    setStoredFavorites(updatedFavorites);
+  }, [removeFromState, favorites, setStoredFavorites]);
+
+  // すべてのお気に入りをクリア
+  const clearAllFavorites = useCallback(() => {
+    clearAllFromState();
+    // ローカルストレージも即座にクリア
+    setStoredFavorites([]);
+  }, [clearAllFromState, setStoredFavorites]);
 
   // お気に入りかどうかをチェック
   const isFavorite = useCallback((imageId: string): boolean => {
@@ -56,6 +64,7 @@ export function useFavorites(): UseFavoritesReturn {
     favorites,
     addToFavorites,
     removeFromFavorites,
+    clearAllFavorites,
     isFavorite,
   };
 }

@@ -42,7 +42,8 @@ export type AppAction =
   | { type: 'SET_SELECTED_BREED'; payload: string | null }
   | { type: 'ADD_TO_FAVORITES'; payload: DogImage }
   | { type: 'REMOVE_FROM_FAVORITES'; payload: string }
-  | { type: 'SET_FAVORITES'; payload: DogImage[] };
+  | { type: 'SET_FAVORITES'; payload: DogImage[] }
+  | { type: 'CLEAR_ALL_FAVORITES' };
 
 // コンポーネント Props 型
 export interface RandomDogImageProps {
@@ -107,6 +108,7 @@ export interface UseFavoritesReturn {
   favorites: DogImage[];
   addToFavorites: (image: DogImage) => void;
   removeFromFavorites: (imageId: string) => void;
+  clearAllFavorites: () => void;
   isFavorite: (imageId: string) => boolean;
 }
 
