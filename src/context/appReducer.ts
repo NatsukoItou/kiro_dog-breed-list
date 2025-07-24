@@ -49,7 +49,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         selectedBreed: action.payload,
       };
 
-    case 'ADD_TO_FAVORITES':
+    case 'ADD_TO_FAVORITES': {
       // 重複チェック
       const existingFavorite = state.favorites.find(fav => fav.id === action.payload.id);
       if (existingFavorite) {
@@ -60,6 +60,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         favorites: [...state.favorites, action.payload],
       };
+    }
 
     case 'REMOVE_FROM_FAVORITES':
       return {
