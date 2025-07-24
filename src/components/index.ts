@@ -4,3 +4,4 @@ export { Footer } from './Footer';
 export { Loading } from './Loading';
 export { BreedDetail } from './BreedDetail';
 export { BreedList } from './BreedList';
+export { RandomDogImage } from './RandomDogImage';
