@@ -10,7 +10,6 @@ export const HomePage: React.FC = () => {
   const { selectedBreed, setSelectedBreed } = useAppState();
 
   const handleBreedSelect = (breed: DogBreed) => {
-    // DogBreed型からstring型に変換してグローバル状態に保存
     setSelectedBreed(breed.name);
   };
 
@@ -18,14 +17,12 @@ export const HomePage: React.FC = () => {
     setSelectedBreed(null);
   };
 
-  // selectedBreedがstring型なので、DogBreed型に変換
   const selectedBreedObj = selectedBreed 
     ? breeds.find(breed => breed.name === selectedBreed) || null
     : null;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>犬種図鑑</h1>
+    <div className="container mx-auto px-4 py-6">
       {selectedBreedObj ? (
         <BreedDetail breed={selectedBreedObj} onBack={handleBack} />
       ) : (
