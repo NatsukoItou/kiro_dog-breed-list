@@ -16,7 +16,7 @@ export const BreedList: React.FC<BreedListProps> = ({
   error
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   if (loading) {
     return <Loading message="犬種リストを読み込み中..." variant="spinner" size="medium" />;
   }
@@ -28,10 +28,10 @@ export const BreedList: React.FC<BreedListProps> = ({
     </div>;
   }
 
-  const filteredBreeds = searchTerm 
-    ? breeds.filter(breed => 
-        breed.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  const filteredBreeds = searchTerm
+    ? breeds.filter(breed =>
+      breed.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : breeds;
 
   return (
@@ -41,9 +41,9 @@ export const BreedList: React.FC<BreedListProps> = ({
           <h2 className="card-title text-2xl mb-4 md:mb-0">犬種一覧</h2>
           <div className="form-control w-full md:w-64">
             <div className="input-group">
-              <input 
-                type="text" 
-                placeholder="犬種を検索..." 
+              <input
+                type="text"
+                placeholder="犬種を検索..."
                 className="input input-bordered w-full"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -58,23 +58,23 @@ export const BreedList: React.FC<BreedListProps> = ({
         </div>
 
         <div className="divider"></div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {filteredBreeds.map((breed) => (
-            <button 
+            <button
               key={breed.id}
               onClick={() => onBreedSelect(breed)}
               className="btn btn-outline btn-primary h-auto py-3 justify-between"
             >
-              <span className="text-left">{breed.name}</span>
+              <span>{breed.name}</span>
               {breed.subBreeds && breed.subBreeds.length > 0 && (
                 <span className="badge badge-secondary ml-2">{breed.subBreeds.length}</span>
               )}
             </button>
           ))}
         </div>
-        
-        <div className="mt-4 text-center text-sm text-base-content/70">
+
+        <div className="mt-4 text-sm text-base-content/70 text-center">
           {filteredBreeds.length} 種類の犬が表示されています
         </div>
       </div>

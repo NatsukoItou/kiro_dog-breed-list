@@ -3,6 +3,9 @@ import { DogApiService } from '../services/dogApi';
 import { useAppState } from '../hooks/useAppState';
 import { useFavorites } from '../hooks/useFavorites';
 import { Loading } from './Loading';
+import { FavoriteButton } from './FavoriteButton';
+import { NextImageButton } from './NextImageButton';
+import styles from '../styles/responsive.module.css';
 import type { DogImage } from '../types';
 
 export const RandomDogImage: React.FC = () => {
@@ -102,42 +105,33 @@ export const RandomDogImage: React.FC = () => {
   const isImageFavorite = isFavorite(displayImage.id);
 
   return (
-    <div className="max-w-2xl mx-auto text-center">
-      <div className="card bg-base-100 shadow-xl">
-        <figure className="px-4 pt-4">
-          <img
-            src={displayImage.url}
-            alt={displayImage.breed ? `${displayImage.breed}の犬` : '犬の画像'}
-            className="rounded-xl max-h-96 w-auto object-contain"
-            onError={() => setError('画像の読み込みに失敗しました')}
-          />
-        </figure>
-        <div className="card-body">
+    <div className="max-w-2xl mx-auto">
+      <div className={`${styles.card} bg-base-100 shadow-xl`}>
+        <div className={`${styles.cardBody}`}>
+          <figure className={`${styles.imageContainer} mb-6`}>
+            <img
+              src={displayImage.url}
+              alt={displayImage.breed ? `${displayImage.breed}の犬` : '犬の画像'}
+              className={`${styles.dogImage} rounded-xl`}
+              onError={() => setError('画像の読み込みに失敗しました')}
+            />
+          </figure>
           {displayImage.breed && (
-            <h2 className="card-title justify-center text-2xl capitalize">
+            <h2 className={`${styles.cardTitle} text-2xl capitalize mb-4`}>
               {displayImage.breed.replace('/', ' - ')}
             </h2>
           )}
-          <div className="card-actions justify-center gap-4 mt-4">
-            <button
-              className="btn btn-primary btn-lg"
+          <div className={`${styles.buttonGroup} gap-6`}>
+            <NextImageButton
               onClick={handleNewImage}
+              loading={loading}
+              variant="new"
+            />
+            <FavoriteButton
+              isFavorite={isImageFavorite}
+              onToggle={handleAddToFavorites}
               disabled={loading}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              新しい画像
-            </button>
-            <button
-              className={`btn btn-lg ${isImageFavorite ? 'btn-error' : 'btn-outline btn-error'}`}
-              onClick={handleAddToFavorites}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill={isImageFavorite ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              {isImageFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
-            </button>
+            />
           </div>
         </div>
       </div>

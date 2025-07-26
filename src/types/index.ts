@@ -70,6 +70,7 @@ export interface ImageControlsProps {
   onAddToFavorites: () => void;
   loading?: boolean;
   canAddToFavorites?: boolean;
+  isFavorite?: boolean;
 }
 
 export interface FavoritesListProps {

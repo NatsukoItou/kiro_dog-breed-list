@@ -1,30 +1,33 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useIsMobile } from '../hooks/useResponsive';
+import styles from '../styles/responsive.module.css';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   return (
-    <nav className="navbar bg-base-100 shadow-md sticky top-0 z-50 mb-8">
+    <nav className={`${styles.navigation} navbar bg-base-100 shadow-md`}>
       <div className="navbar-center">
-        <div className="tabs tabs-boxed">
+        <div className={`${styles.navTabs} tabs tabs-boxed`}>
           <NavLink
             to="/"
-            className={({ isActive }) => `tab tab-lg ${isActive ? 'tab-active' : ''}`}
+            className={({ isActive }) => `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`}
             end
           >
-            🏠 ホーム
+            {isMobile ? '🏠' : '🏠 ホーム'}
           </NavLink>
           {location.pathname.startsWith('/breed/') && (
-            <span className="tab tab-lg tab-active">
-              🐕 犬種ページ
+            <span className={`${styles.navTab} tab tab-active`}>
+              {isMobile ? '🐕' : '🐕 犬種ページ'}
             </span>
           )}
           <NavLink
             to="/favorites"
-            className={({ isActive }) => `tab tab-lg ${isActive ? 'tab-active' : ''}`}
+            className={({ isActive }) => `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`}
           >
-            ❤️ お気に入り
+            {isMobile ? '❤️' : '❤️ お気に入り'}
           </NavLink>
         </div>
       </div>
