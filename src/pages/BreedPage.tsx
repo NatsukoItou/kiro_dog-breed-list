@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { DogImage } from '../components/DogImage';
 import { ImageControls } from '../components/ImageControls';
 import { DogApiService } from '../services/dogApi';
 import { useFavorites } from '../hooks/useFavorites';
+import { useDogBreeds } from '../hooks/useDogBreeds';
 import type { DogImage as DogImageType } from '../types';
 
-interface BreedPageProps {
+interface BreedPageContentProps {
     breedId: string;
     breedName: string;
     onBack?: () => void;
 }
 
-export const BreedPage: React.FC<BreedPageProps> = ({
+const BreedPageContent: React.FC<BreedPageContentProps> = ({
     breedId,
     breedName,
     onBack
@@ -220,6 +222,94 @@ export const BreedPage: React.FC<BreedPageProps> = ({
                     </div>
                 </section>
             </div>
+        </div>
+    );
+};
+
+export const BreedPage: React.FC = () => {
+    const { breedId } = useParams<{ breedId: string }>();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const { breeds, loading: breedsLoading } = useDogBreeds();
+
+    // Handle navigation effects
+    useEffect(() => {
+        // If no breedId in URL, redirect to home
+        if (!breedId) {
+            navigate('/');
+            return;
+        }
+
+        // Validate breed ID format (basic validation)
+        const isValidBreedId = /^[a-z]+([/-][a-z]+)*$/.test(breedId);
+        
+        // If breed ID format is invalid, redirect to 404
+        if (!isValidBreedId) {
+            navigate('/404', { replace: true });
+            return;
+        }
+    }, [breedId, navigate]);
+
+    // Early return if no breedId
+    if (!breedId) {
+        return null;
+    }
+
+    // Validate breed ID format (basic validation)
+    const isValidBreedId = /^[a-z]+([/-][a-z]+)*$/.test(breedId);
+    
+    // Early return if invalid breed ID format
+    if (!isValidBreedId) {
+        return null;
+    }
+    
+    // If breeds are loaded and breed ID is not found, show 404
+    if (!breedsLoading && breeds.length > 0 && !breeds.find(b => b.name === breedId) && isValidBreedId) {
+        return (
+            <div className="container mx-auto px-4 py-16 text-center">
+                <div className="max-w-md mx-auto">
+                    <div className="text-6xl mb-4">🐕</div>
+                    <h1 className="text-2xl font-bold text-base-content mb-4">
+                        犬種が見つかりません
+                    </h1>
+                    <p className="text-base-content/70 mb-8">
+                        「{breedId}」という犬種は存在しないか、現在利用できません。
+                    </p>
+                    <Link to="/" className="btn btn-primary">
+                        ホームに戻る
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    // Find the breed information
+    const breed = breeds.find(b => b.name === breedId);
+    const breedName = breed?.name || breedId.replace('-', ' ');
+
+    // Get return path from query params, default to home
+    const returnPath = searchParams.get('from') || '/';
+
+    const handleBack = () => {
+        navigate(returnPath);
+    };
+
+    return (
+        <div>
+            {/* Breadcrumb Navigation */}
+            <div className="breadcrumbs text-sm container mx-auto px-4 py-2">
+                <ul>
+                    <li><Link to="/">ホーム</Link></li>
+                    <li>犬種</li>
+                    <li className="capitalize">{breedName.replace('/', ' - ')}</li>
+                </ul>
+            </div>
+            
+            <BreedPageContent
+                breedId={breedId}
+                breedName={breedName}
+                onBack={handleBack}
+            />
         </div>
     );
 };
