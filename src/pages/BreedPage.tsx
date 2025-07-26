@@ -232,14 +232,36 @@ export const BreedPage: React.FC = () => {
     const [searchParams] = useSearchParams();
     const { breeds, loading: breedsLoading } = useDogBreeds();
 
-    // If no breedId in URL, redirect to home
+    // Handle navigation effects
+    useEffect(() => {
+        // If no breedId in URL, redirect to home
+        if (!breedId) {
+            navigate('/');
+            return;
+        }
+
+        // Validate breed ID format (basic validation)
+        const isValidBreedId = /^[a-z]+([/-][a-z]+)*$/.test(breedId);
+        
+        // If breed ID format is invalid, redirect to 404
+        if (!isValidBreedId) {
+            navigate('/404', { replace: true });
+            return;
+        }
+    }, [breedId, navigate]);
+
+    // Early return if no breedId
     if (!breedId) {
-        navigate('/');
         return null;
     }
 
     // Validate breed ID format (basic validation)
     const isValidBreedId = /^[a-z]+([/-][a-z]+)*$/.test(breedId);
+    
+    // Early return if invalid breed ID format
+    if (!isValidBreedId) {
+        return null;
+    }
     
     // If breeds are loaded and breed ID is not found, show 404
     if (!breedsLoading && breeds.length > 0 && !breeds.find(b => b.name === breedId) && isValidBreedId) {
@@ -259,12 +281,6 @@ export const BreedPage: React.FC = () => {
                 </div>
             </div>
         );
-    }
-
-    // If breed ID format is invalid, redirect to 404
-    if (!isValidBreedId) {
-        navigate('/404', { replace: true });
-        return null;
     }
 
     // Find the breed information
