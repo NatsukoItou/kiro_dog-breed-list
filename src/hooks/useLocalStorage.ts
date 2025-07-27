@@ -27,23 +27,27 @@ export function useLocalStorage<T>(
   });
 
   // 値を設定してローカルストレージに保存
-  const setStoredValue = useCallback((newValue: T | ((prev: T) => T)) => {
-    try {
-      // 関数型更新をサポート
-      setValue(prevValue => {
-        const valueToStore = newValue instanceof Function ? newValue(prevValue) : newValue;
-        
-        // SSR環境では localStorage にアクセスしない
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem(key, JSON.stringify(valueToStore));
-        }
-        
-        return valueToStore;
-      });
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  }, [key]);
+  const setStoredValue = useCallback(
+    (newValue: T | ((prev: T) => T)) => {
+      try {
+        // 関数型更新をサポート
+        setValue((prevValue) => {
+          const valueToStore =
+            newValue instanceof Function ? newValue(prevValue) : newValue;
+
+          // SSR環境では localStorage にアクセスしない
+          if (typeof window !== 'undefined') {
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          }
+
+          return valueToStore;
+        });
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error);
+      }
+    },
+    [key]
+  );
 
   // 値を削除
   const removeValue = useCallback(() => {
@@ -70,7 +74,10 @@ export function useLocalStorage<T>(
         try {
           setValue(JSON.parse(e.newValue));
         } catch (error) {
-          console.warn(`Error parsing localStorage value for key "${key}":`, error);
+          console.warn(
+            `Error parsing localStorage value for key "${key}":`,
+            error
+          );
         }
       }
     };

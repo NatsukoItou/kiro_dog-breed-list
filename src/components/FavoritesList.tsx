@@ -5,12 +5,12 @@ import type { FavoritesListProps } from '../types';
 
 export const FavoritesList: React.FC<FavoritesListProps> = ({
   favorites,
-  onRemoveFavorite
+  onRemoveFavorite,
 }) => {
   // Sort favorites by addedAt date (newest first)
   const sortedFavorites = useMemo(() => {
-    return [...favorites].sort((a, b) =>
-      new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
+    return [...favorites].sort(
+      (a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
     );
   }, [favorites]);
 
@@ -18,7 +18,7 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
   const groupedFavorites = useMemo(() => {
     const groups: Record<string, typeof favorites> = {};
 
-    sortedFavorites.forEach(favorite => {
+    sortedFavorites.forEach((favorite) => {
       const breed = favorite.breed || 'その他';
       if (!groups[breed]) {
         groups[breed] = [];
@@ -56,7 +56,9 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
         </p>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-info/10 text-info rounded-full">
           <span className="text-lg">💡</span>
-          <span className="text-sm font-medium">画像の下にあるハートボタンでお気に入りに追加できます</span>
+          <span className="text-sm font-medium">
+            画像の下にあるハートボタンでお気に入りに追加できます
+          </span>
         </div>
       </div>
     );

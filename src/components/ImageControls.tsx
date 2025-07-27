@@ -10,9 +10,8 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
   loading = false,
   canAddToFavorites = true,
   isFavorite = false,
-  variant = 'next'
+  variant = 'next',
 }) => {
-
   return (
     <div className={`${styles.modernButtonGroup} gap-3 mt-6`}>
       {/* Next Image Button */}

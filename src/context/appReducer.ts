@@ -51,11 +51,13 @@ export function appReducer(state: AppState, action: AppAction): AppState {
 
     case 'ADD_TO_FAVORITES': {
       // 重複チェック
-      const existingFavorite = state.favorites.find(fav => fav.id === action.payload.id);
+      const existingFavorite = state.favorites.find(
+        (fav) => fav.id === action.payload.id
+      );
       if (existingFavorite) {
         return state; // 既に存在する場合は何もしない
       }
-      
+
       return {
         ...state,
         favorites: [...state.favorites, action.payload],
@@ -65,7 +67,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
     case 'REMOVE_FROM_FAVORITES':
       return {
         ...state,
-        favorites: state.favorites.filter(fav => fav.id !== action.payload),
+        favorites: state.favorites.filter((fav) => fav.id !== action.payload),
       };
 
     case 'SET_FAVORITES':

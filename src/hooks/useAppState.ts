@@ -11,51 +11,78 @@ export function useAppState() {
   const { state, dispatch } = useAppContext();
 
   // 状態更新のヘルパー関数（useCallbackで安定化）
-  const setLoading = useCallback((loading: boolean) => {
-    dispatch(actions.setLoading(loading));
-  }, [dispatch]);
+  const setLoading = useCallback(
+    (loading: boolean) => {
+      dispatch(actions.setLoading(loading));
+    },
+    [dispatch]
+  );
 
-  const setError = useCallback((error: string | null) => {
-    dispatch(actions.setError(error));
-  }, [dispatch]);
+  const setError = useCallback(
+    (error: string | null) => {
+      dispatch(actions.setError(error));
+    },
+    [dispatch]
+  );
 
-  const setCurrentImage = useCallback((image: DogImage | null) => {
-    dispatch(actions.setCurrentImage(image));
-  }, [dispatch]);
+  const setCurrentImage = useCallback(
+    (image: DogImage | null) => {
+      dispatch(actions.setCurrentImage(image));
+    },
+    [dispatch]
+  );
 
-  const setBreeds = useCallback((breeds: string[]) => {
-    dispatch(actions.setBreeds(breeds));
-  }, [dispatch]);
+  const setBreeds = useCallback(
+    (breeds: string[]) => {
+      dispatch(actions.setBreeds(breeds));
+    },
+    [dispatch]
+  );
 
-  const setSelectedBreed = useCallback((breed: string | null) => {
-    dispatch(actions.setSelectedBreed(breed));
-  }, [dispatch]);
+  const setSelectedBreed = useCallback(
+    (breed: string | null) => {
+      dispatch(actions.setSelectedBreed(breed));
+    },
+    [dispatch]
+  );
 
-  const addToFavorites = useCallback((image: DogImage) => {
-    dispatch(actions.addToFavorites(image));
-  }, [dispatch]);
+  const addToFavorites = useCallback(
+    (image: DogImage) => {
+      dispatch(actions.addToFavorites(image));
+    },
+    [dispatch]
+  );
 
-  const removeFromFavorites = useCallback((imageId: string) => {
-    dispatch(actions.removeFromFavorites(imageId));
-  }, [dispatch]);
+  const removeFromFavorites = useCallback(
+    (imageId: string) => {
+      dispatch(actions.removeFromFavorites(imageId));
+    },
+    [dispatch]
+  );
 
-  const setFavorites = useCallback((favorites: DogImage[]) => {
-    dispatch(actions.setFavorites(favorites));
-  }, [dispatch]);
+  const setFavorites = useCallback(
+    (favorites: DogImage[]) => {
+      dispatch(actions.setFavorites(favorites));
+    },
+    [dispatch]
+  );
 
   const clearAllFavorites = useCallback(() => {
     dispatch(actions.clearAllFavorites());
   }, [dispatch]);
 
   // お気に入りチェック用のヘルパー関数
-  const isFavorite = useCallback((imageId: string): boolean => {
-    return state.favorites.some(fav => fav.id === imageId);
-  }, [state.favorites]);
+  const isFavorite = useCallback(
+    (imageId: string): boolean => {
+      return state.favorites.some((fav) => fav.id === imageId);
+    },
+    [state.favorites]
+  );
 
   return {
     // 状態
     ...state,
-    
+
     // アクション
     setLoading,
     setError,
@@ -66,7 +93,7 @@ export function useAppState() {
     removeFromFavorites,
     setFavorites,
     clearAllFavorites,
-    
+
     // ヘルパー
     isFavorite,
   };

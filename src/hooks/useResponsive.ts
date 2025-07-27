@@ -44,7 +44,7 @@ export const useResponsive = (): ResponsiveState => {
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     return {
       width,
       height,
@@ -84,7 +84,7 @@ export const useResponsive = (): ResponsiveState => {
     };
 
     window.addEventListener('resize', debouncedHandleResize);
-    
+
     // 初回実行
     handleResize();
 
@@ -137,9 +137,9 @@ export const useIsTouchDevice = (): boolean => {
     const checkTouchDevice = () => {
       setIsTouchDevice(
         'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        // @ts-expect-error - msMaxTouchPoints is legacy IE property
-        navigator.msMaxTouchPoints > 0
+          navigator.maxTouchPoints > 0 ||
+          // @ts-expect-error - msMaxTouchPoints is legacy IE property
+          navigator.msMaxTouchPoints > 0
       );
     };
 

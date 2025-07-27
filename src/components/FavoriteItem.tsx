@@ -5,7 +5,7 @@ import type { FavoriteItemProps } from '../types';
 
 export const FavoriteItem: React.FC<FavoriteItemProps> = ({
   image,
-  onRemove
+  onRemove,
 }) => {
   const isMobile = useIsMobile();
   const handleRemove = useCallback(() => {
@@ -18,12 +18,14 @@ export const FavoriteItem: React.FC<FavoriteItemProps> = ({
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }).format(date);
   };
 
   return (
-    <div className={`${styles.favoriteItem} ${styles.card} bg-base-100 shadow-md hover:shadow-lg transition-shadow`}>
+    <div
+      className={`${styles.favoriteItem} ${styles.card} bg-base-100 shadow-md hover:shadow-lg transition-shadow`}
+    >
       <div className={`${styles.favoriteImageContainer}`}>
         <img
           src={image.url}
@@ -37,11 +39,15 @@ export const FavoriteItem: React.FC<FavoriteItemProps> = ({
         <div className="flex flex-col h-full">
           <div className="flex-1">
             {image.breed && (
-              <div className={`${styles.favoriteTitle} badge badge-primary badge-sm mb-2`}>
+              <div
+                className={`${styles.favoriteTitle} badge badge-primary badge-sm mb-2`}
+              >
                 {image.breed.replace('/', ' - ')}
               </div>
             )}
-            <p className={`${styles.favoriteDate} text-sm text-base-content/70 mb-4`}>
+            <p
+              className={`${styles.favoriteDate} text-sm text-base-content/70 mb-4`}
+            >
               {formatDate(image.addedAt)}
             </p>
           </div>
@@ -67,7 +73,7 @@ export const FavoriteItem: React.FC<FavoriteItemProps> = ({
               </svg>
               {isMobile ? '拡大' : '拡大表示'}
             </button>
-            
+
             <button
               onClick={handleRemove}
               className={`${styles.button} btn btn-sm btn-error hover:btn-error text-white flex-1`}
