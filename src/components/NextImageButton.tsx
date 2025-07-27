@@ -15,7 +15,6 @@ export const NextImageButton: React.FC<NextImageButtonProps> = ({
   loading = false,
   disabled = false,
   variant = 'next',
-  size = 'lg',
   className = ''
 }) => {
   const buttonText = variant === 'new' ? '新しい画像' : '次の画像';
@@ -25,7 +24,7 @@ export const NextImageButton: React.FC<NextImageButtonProps> = ({
     <button
       onClick={onClick}
       disabled={loading || disabled}
-      className={`${styles.button} ${styles.buttonPrimary} ${styles.buttonIcon} btn btn-${size} shadow-lg hover:shadow-xl transition-all duration-300 ${className}`}
+      className={`${styles.modernButton} ${styles.modernButtonNext} ${className}`}
     >
       {loading ? (
         <>

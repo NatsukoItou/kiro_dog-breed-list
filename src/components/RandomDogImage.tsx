@@ -121,7 +121,7 @@ export const RandomDogImage: React.FC = () => {
               {displayImage.breed.replace('/', ' - ')}
             </h2>
           )}
-          <div className={`${styles.buttonGroup} gap-6`}>
+          <div className={`${styles.modernButtonGroup} gap-3`}>
             <NextImageButton
               onClick={handleNewImage}
               loading={loading}
