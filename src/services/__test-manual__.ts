@@ -38,7 +38,10 @@ export async function testDogApiService() {
 
     // Test 4: Get multiple breed images
     console.log('4. Testing getMultipleBreedImages()...');
-    const multipleImages = await DogApiService.getMultipleBreedImages(testBreed, 2);
+    const multipleImages = await DogApiService.getMultipleBreedImages(
+      testBreed,
+      2
+    );
     console.log(`✅ Multiple ${testBreed} images:`, multipleImages);
     console.log('   - Count:', multipleImages.length);
     console.log('');
@@ -58,7 +61,6 @@ export async function testDogApiService() {
 
     console.log('🎉 All tests passed successfully!');
     return true;
-
   } catch (error) {
     console.error('❌ Test failed:', error);
     return false;

@@ -36,13 +36,12 @@ export async function testBreedPageComponents() {
       id: 'test-id',
       url: 'https://images.dog.ceo/breeds/golden-retriever/test.jpg',
       breed: testBreed,
-      addedAt: new Date()
+      addedAt: new Date(),
     };
     console.log('✅ Image data structure is valid:', imageData);
-    console.log('   - Has required fields:', 
-      'id' in imageData && 
-      'url' in imageData && 
-      'addedAt' in imageData
+    console.log(
+      '   - Has required fields:',
+      'id' in imageData && 'url' in imageData && 'addedAt' in imageData
     );
     console.log('');
 
@@ -50,12 +49,12 @@ export async function testBreedPageComponents() {
     console.log('4. Testing breed name formatting...');
     const breedNames = [
       'labrador',
-      'golden-retriever', 
+      'golden-retriever',
       'bulldog/french',
-      'terrier/scottish'
+      'terrier/scottish',
     ];
-    
-    breedNames.forEach(breed => {
+
+    breedNames.forEach((breed) => {
       const formatted = breed.replace('/', ' - ');
       console.log(`   - "${breed}" → "${formatted}"`);
     });
@@ -65,10 +64,15 @@ export async function testBreedPageComponents() {
     // Test 5: Test error handling
     console.log('5. Testing error handling...');
     try {
-      await DogApiService.getBreedImage('invalid-breed-name-that-does-not-exist');
+      await DogApiService.getBreedImage(
+        'invalid-breed-name-that-does-not-exist'
+      );
       console.log('❌ Expected error for invalid breed');
     } catch (error) {
-      console.log('✅ Error handling works correctly:', error instanceof Error ? error.message : 'Unknown error');
+      console.log(
+        '✅ Error handling works correctly:',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
     console.log('');
 
@@ -79,17 +83,17 @@ export async function testBreedPageComponents() {
       const image = await DogApiService.getBreedImage(testBreed);
       imageHistory.push(image);
       // Small delay to ensure different images
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
     console.log('✅ Image history simulation:', imageHistory.length, 'images');
-    console.log('   - All images have unique IDs:', 
-      new Set(imageHistory.map(img => img.id)).size === imageHistory.length
+    console.log(
+      '   - All images have unique IDs:',
+      new Set(imageHistory.map((img) => img.id)).size === imageHistory.length
     );
     console.log('');
 
     console.log('🎉 All BreedPage component tests passed successfully!');
     return true;
-
   } catch (error) {
     console.error('❌ BreedPage component test failed:', error);
     return false;

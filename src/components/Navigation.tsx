@@ -13,7 +13,9 @@ export const Navigation: React.FC = () => {
         <div className={`${styles.navTabs} tabs tabs-boxed`}>
           <NavLink
             to="/"
-            className={({ isActive }) => `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`}
+            className={({ isActive }) =>
+              `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`
+            }
             end
           >
             {isMobile ? '🏠' : '🏠 ホーム'}
@@ -25,7 +27,9 @@ export const Navigation: React.FC = () => {
           )}
           <NavLink
             to="/favorites"
-            className={({ isActive }) => `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`}
+            className={({ isActive }) =>
+              `${styles.navTab} tab ${isActive ? 'tab-active' : ''}`
+            }
           >
             {isMobile ? '❤️' : '❤️ お気に入り'}
           </NavLink>

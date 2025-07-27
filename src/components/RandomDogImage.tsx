@@ -24,7 +24,8 @@ export const RandomDogImage: React.FC = () => {
       setLocalImage(image);
       setCurrentImage(image);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'ランダム画像の取得に失敗しました';
+      const errorMessage =
+        err instanceof Error ? err.message : 'ランダム画像の取得に失敗しました';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -73,15 +74,22 @@ export const RandomDogImage: React.FC = () => {
     return (
       <div className="text-center p-8">
         <div className="alert alert-error max-w-md mx-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span>{error}</span>
         </div>
-        <button
-          className="btn btn-primary mt-4"
-          onClick={handleNewImage}
-        >
+        <button className="btn btn-primary mt-4" onClick={handleNewImage}>
           再試行
         </button>
       </div>
@@ -92,10 +100,7 @@ export const RandomDogImage: React.FC = () => {
     return (
       <div className="text-center p-8">
         <p className="text-base-content/70">画像が見つかりません</p>
-        <button
-          className="btn btn-primary mt-4"
-          onClick={handleNewImage}
-        >
+        <button className="btn btn-primary mt-4" onClick={handleNewImage}>
           新しい画像を取得
         </button>
       </div>
@@ -108,11 +113,8 @@ export const RandomDogImage: React.FC = () => {
     <div className="max-w-2xl mx-auto">
       <div className={`${styles.card} bg-base-100 shadow-xl`}>
         <div className={`${styles.cardBody}`}>
-          <DogImage
-            image={displayImage}
-            loading={loading}
-          />
-          
+          <DogImage image={displayImage} loading={loading} />
+
           <ImageControls
             onNextImage={handleNewImage}
             onAddToFavorites={handleAddToFavorites}

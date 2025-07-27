@@ -17,12 +17,15 @@ export const HomePage: React.FC = () => {
     setSelectedBreed(null);
   }, [setSelectedBreed]);
 
-  const handleImageLoad = useCallback((image: DogImage) => {
-    setCurrentImage(image);
-  }, [setCurrentImage]);
+  const handleImageLoad = useCallback(
+    (image: DogImage) => {
+      setCurrentImage(image);
+    },
+    [setCurrentImage]
+  );
 
   const selectedBreedObj = selectedBreed
-    ? breeds.find(breed => breed.name === selectedBreed) || null
+    ? breeds.find((breed) => breed.name === selectedBreed) || null
     : null;
 
   return (
@@ -34,11 +37,11 @@ export const HomePage: React.FC = () => {
           {/* ランダム犬画像セクション */}
           <section className={styles.section}>
             <div className="mb-6">
-              <h1 className={styles.sectionTitle}>
-                おすすめの犬画像
-              </h1>
+              <h1 className={styles.sectionTitle}>おすすめの犬画像</h1>
               <p className={styles.sectionDescription}>
-                {isMobile ? 'ランダムな犬の画像' : 'ランダムな犬の画像をお楽しみください'}
+                {isMobile
+                  ? 'ランダムな犬の画像'
+                  : 'ランダムな犬の画像をお楽しみください'}
               </p>
             </div>
             <RandomDogImage />
@@ -47,11 +50,11 @@ export const HomePage: React.FC = () => {
           {/* 犬種選択セクション */}
           <section className={styles.section}>
             <div className="mb-6">
-              <h2 className={styles.sectionTitle}>
-                犬種から選ぶ
-              </h2>
+              <h2 className={styles.sectionTitle}>犬種から選ぶ</h2>
               <p className={styles.sectionDescription}>
-                {isMobile ? 'お好みの犬種を選択' : 'お好みの犬種を選んで画像を見てみましょう'}
+                {isMobile
+                  ? 'お好みの犬種を選択'
+                  : 'お好みの犬種を選んで画像を見てみましょう'}
               </p>
             </div>
             <BreedSelector

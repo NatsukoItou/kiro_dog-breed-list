@@ -17,12 +17,5 @@ export function AppProvider({ children }: AppProviderProps) {
     dispatch,
   };
 
-  return (
-    <AppContext.Provider value={value}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
-
-
-

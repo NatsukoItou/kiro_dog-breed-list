@@ -19,10 +19,15 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
       try {
         setLoading(true);
         setError(null);
-        const dogImages = await DogApiService.getMultipleBreedImages(breed.id, 6);
+        const dogImages = await DogApiService.getMultipleBreedImages(
+          breed.id,
+          6
+        );
         setImages(dogImages);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '画像の取得に失敗しました');
+        setError(
+          err instanceof Error ? err.message : '画像の取得に失敗しました'
+        );
       } finally {
         setLoading(false);
       }
@@ -36,30 +41,57 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
       <div className="card-body">
         <div className="flex items-center mb-6">
           <button onClick={onBack} className={`${styles.backButton} mr-4`}>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             <span className="font-semibold">戻る</span>
           </button>
           <h2 className="card-title text-3xl font-bold">{breed.name}</h2>
         </div>
-        
+
         {breed.subBreeds && breed.subBreeds.length > 0 && (
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-2">サブ犬種:</h3>
             <div className="flex flex-wrap gap-2">
               {breed.subBreeds.map((subBreed) => (
-                <div key={subBreed} className="badge badge-primary badge-lg">{subBreed}</div>
+                <div key={subBreed} className="badge badge-primary badge-lg">
+                  {subBreed}
+                </div>
               ))}
             </div>
           </div>
         )}
 
         <h3 className="text-xl font-semibold mb-4">画像:</h3>
-        {loading && <Loading message="画像を読み込み中..." variant="dots" size="medium" />}
+        {loading && (
+          <Loading message="画像を読み込み中..." variant="dots" size="medium" />
+        )}
         {error && (
           <div className="alert alert-error">
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
             <span>エラー: {error}</span>
           </div>
         )}

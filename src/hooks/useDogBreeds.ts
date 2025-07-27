@@ -15,7 +15,9 @@ export const useDogBreeds = () => {
         const breedsData = await DogApiService.getAllBreeds();
         setBreeds(breedsData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '犬種データの取得に失敗しました');
+        setError(
+          err instanceof Error ? err.message : '犬種データの取得に失敗しました'
+        );
       } finally {
         setLoading(false);
       }
