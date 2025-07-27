@@ -20,7 +20,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 }) => {
   const baseClasses = variant === 'circle' 
     ? `btn btn-circle ${isFavorite ? 'btn-error' : 'btn-outline btn-error'}`
-    : `${styles.modernButton} ${isFavorite ? styles.modernButtonFavorite : styles.modernButtonFavoriteOutline}`;
+    : `${styles.modernButtonUnified} ${isFavorite ? styles.modernButtonFavorite : styles.modernButtonFavoriteOutline}`;
 
   const iconSize = size === 'sm' ? 'h-4 w-4' : size === 'md' ? 'h-5 w-5' : 'h-5 w-5';
 

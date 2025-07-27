@@ -1,6 +1,7 @@
 import React from 'react';
 import type { DogImageProps } from '../types';
 import { Loading } from './Loading';
+import styles from '../styles/responsive.module.css';
 
 export const DogImage: React.FC<DogImageProps> = ({
     image,
@@ -30,11 +31,11 @@ export const DogImage: React.FC<DogImageProps> = ({
 
     return (
         <div>
-            <figure className="mb-6">
+            <figure className={`${styles.imageContainer} mb-6`}>
                 <img
                     src={image.url}
                     alt={image.breed ? `${image.breed}の画像` : '犬の画像'}
-                    className="rounded-xl max-h-96 w-auto object-contain mx-auto"
+                    className={`${styles.dogImage} rounded-xl`}
                     onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuOCqOODqeODvOOBjOeZuueUn+OBl+OBvuOBl+OBnw==</text></svg>';

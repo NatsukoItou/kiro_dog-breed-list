@@ -19,12 +19,12 @@ export const NextImageButton: React.FC<NextImageButtonProps> = ({
 }) => {
   const buttonText = variant === 'new' ? '新しい画像' : '次の画像';
   const loadingText = variant === 'new' ? '新しい画像を取得中...' : '読み込み中...';
-  
+
   return (
     <button
       onClick={onClick}
       disabled={loading || disabled}
-      className={`${styles.modernButton} ${styles.modernButtonNext} ${className}`}
+      className={`${styles.modernButtonUnified} ${styles.modernButtonNext} ${className}`}
     >
       {loading ? (
         <>
