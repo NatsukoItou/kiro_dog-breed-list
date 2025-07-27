@@ -10,3 +10,11 @@ export { DogImage } from './DogImage';
 export { ImageControls } from './ImageControls';
 export { FavoritesList } from './FavoritesList';
 export { FavoriteItem } from './FavoriteItem';
+export { ErrorBoundary, WithErrorBoundary } from './ErrorBoundary';
+export { ToastContainer } from './Toast';
+export {
+  FallbackUI,
+  NetworkErrorFallback,
+  ImageErrorFallback,
+  EmptyFavoritesUI,
+} from './FallbackUI';
