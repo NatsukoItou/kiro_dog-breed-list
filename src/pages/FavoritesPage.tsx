@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { FavoritesList } from '../components/FavoritesList';
 import { useFavorites } from '../hooks/useFavorites';
+import { useIsMobile } from '../hooks/useResponsive';
+import styles from '../styles/responsive.module.css';
 
 export const FavoritesPage: React.FC = () => {
   const { favorites, removeFromFavorites, clearAllFavorites: clearAll } = useFavorites();
   const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(null);
-
-
+  const isMobile = useIsMobile();
 
   const handleRemoveFavorite = useCallback((imageId: string) => {
     removeFromFavorites(imageId);
@@ -33,35 +34,40 @@ export const FavoritesPage: React.FC = () => {
   }, [favorites.length, clearAll]);
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className={`${styles.container} ${styles.main}`}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-base-content mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-10 gap-6">
+        <div className="flex-1">
+          <h1 className={`text-3xl font-bold text-base-content mb-3`}>
             お気に入り
           </h1>
-          <p className="text-base-content/70">
-            保存した犬の画像を管理できます
+          <p className={`text-base-content/70 text-lg mb-0`}>
+            {isMobile ? '保存した犬の画像' : '保存した犬の画像を管理できます'}
           </p>
+          {favorites.length > 0 && (
+            <p className="text-sm text-base-content/60 mt-2">
+              {favorites.length}件のお気に入り画像
+            </p>
+          )}
         </div>
 
         {favorites.length > 0 && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-shrink-0">
             <button
               onClick={clearAllFavorites}
               className="btn btn-error btn-sm text-white hover:btn-error"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 mr-1" 
+                className="h-4 w-4 mr-1"
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
+                strokeWidth={2}
               >
                 <path 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
-                  strokeWidth={2} 
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
                 />
               </svg>

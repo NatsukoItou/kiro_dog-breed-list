@@ -8,6 +8,7 @@ import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
 import './App.css';
+import styles from './styles/responsive.module.css';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <div className="min-h-screen bg-base-100 flex flex-col">
           <Header />
           <Navigation />
-          <main className="flex-1">
+          <main className={`flex-1 ${styles.main}`}>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/breed/:breedId" element={<BreedPage />} />

@@ -107,7 +107,7 @@ export const runManualTests = () => {
     console.log('Please run these tests manually in the browser:');
     console.log('');
 
-    Object.entries(routingTests).forEach(([key, test]) => {
+    Object.entries(routingTests).forEach(([, test]) => {
         console.log(`📋 ${test.description}`);
         console.log('Steps:');
         test.steps.forEach(step => console.log(`  ${step}`));

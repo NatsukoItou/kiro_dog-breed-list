@@ -7,3 +7,4 @@ export { useDogBreeds } from './useDogBreeds';
 export { useLocalStorage } from './useLocalStorage';
 export { useFavorites } from './useFavorites';
 export { useUserPreferences } from './useUserPreferences';
+export { useResponsive, useBreakpoint, useIsMobile, useIsTouchDevice } from './useResponsive';

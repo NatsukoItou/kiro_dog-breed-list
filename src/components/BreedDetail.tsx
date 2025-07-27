@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { DogBreed, DogImage } from '../types';
 import { DogApiService } from '../services/dogApi';
 import { Loading } from './Loading';
+import styles from '../styles/responsive.module.css';
 
 interface BreedDetailProps {
   breed: DogBreed;
@@ -33,13 +34,14 @@ export const BreedDetail: React.FC<BreedDetailProps> = ({ breed, onBack }) => {
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
-        <div className="flex items-center mb-4">
-          <button onClick={onBack} className="btn btn-circle btn-outline mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <div className="flex items-center mb-6">
+          <button onClick={onBack} className={`${styles.backButton} mr-4`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
+            <span className="font-semibold">戻る</span>
           </button>
-          <h2 className="card-title text-2xl">{breed.name}</h2>
+          <h2 className="card-title text-3xl font-bold">{breed.name}</h2>
         </div>
         
         {breed.subBreeds && breed.subBreeds.length > 0 && (

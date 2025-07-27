@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import type { DogBreed, DogImage } from '../types';
 import { DogApiService } from '../services/dogApi';
 import { Loading } from './Loading';
+import { NextImageButton } from './NextImageButton';
+import styles from '../styles/responsive.module.css';
 
 interface BreedSelectorProps {
   breeds: DogBreed[];
@@ -25,10 +27,10 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filter breeds based on search term
-  const filteredBreeds = searchTerm 
-    ? breeds.filter(breed => 
-        breed.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  const filteredBreeds = searchTerm
+    ? breeds.filter(breed =>
+      breed.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : breeds;
 
   // Load image when breed is selected
@@ -94,40 +96,35 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
               <h2 className="card-title text-2xl mb-4 md:mb-0">犬種を選択</h2>
               <div className="form-control w-full md:w-64">
                 <div className="input-group">
-                  <input 
-                    type="text" 
-                    placeholder="犬種を検索..." 
+                  <input
+                    type="text"
+                    placeholder="犬種を検索..."
                     className="input input-bordered w-full"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                  <button className="btn btn-square">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
                 </div>
               </div>
             </div>
 
             <div className="divider"></div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-96 overflow-y-auto">
+
+            <div className={`${styles.breedGrid} ${styles.grid} gap-3`}>
               {filteredBreeds.map((breed) => (
-                <button 
+                <button
                   key={breed.id}
                   onClick={() => handleBreedSelect(breed)}
-                  className="btn btn-outline btn-primary h-auto py-3 text-sm"
+                  className={`${styles.breedButton} btn btn-lg btn-outline btn-primary shadow-lg hover:shadow-xl transition-all duration-300 h-auto py-3`}
                 >
-                  <span className="text-center">{breed.name}</span>
+                  <span>{breed.name}</span>
                   {breed.subBreeds && breed.subBreeds.length > 0 && (
                     <span className="badge badge-secondary badge-xs ml-1">{breed.subBreeds.length}</span>
                   )}
                 </button>
               ))}
             </div>
-            
-            <div className="mt-4 text-center text-sm text-base-content/70">
+
+            <div className="mt-4 text-sm text-base-content/70 text-center">
               {filteredBreeds.length} 種類の犬が表示されています
             </div>
           </>
@@ -136,9 +133,9 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
           <>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-                <button onClick={handleReset} className="btn btn-circle btn-outline mr-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <button onClick={handleReset} className={`${styles.backButtonCircle} mr-4`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
                 <div>
@@ -152,31 +149,21 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
                   )}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button 
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                <NextImageButton
                   onClick={handleNextImage}
-                  disabled={imageLoading}
-                  className="btn btn-primary"
-                >
-                  {imageLoading ? (
-                    <span className="loading loading-spinner loading-sm"></span>
-                  ) : (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                      次の画像
-                    </>
-                  )}
-                </button>
-                <button 
+                  loading={imageLoading}
+                  variant="next"
+                  className="flex-1 sm:flex-none"
+                />
+                <button
                   onClick={() => navigate(`/breed/${selectedBreed.id}?from=/`)}
-                  className="btn btn-outline btn-secondary"
+                  className={`${styles.button} ${styles.buttonPrimary} ${styles.buttonIcon} btn btn-lg shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                  詳細ページへ
+                  <span className="font-semibold">詳細ページへ</span>
                 </button>
               </div>
             </div>
@@ -190,7 +177,7 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
                   <Loading message="画像を読み込み中..." variant="dots" size="medium" />
                 </div>
               )}
-              
+
               {imageError && (
                 <div className="alert alert-warning max-w-md">
                   <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -202,7 +189,7 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
                   </div>
                 </div>
               )}
-              
+
               {currentImage && !imageLoading && !imageError && (
                 <div className="card bg-base-200 shadow-lg max-w-md">
                   <figure className="p-4">
@@ -214,7 +201,7 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
                     />
                   </figure>
                   <div className="card-body pt-2">
-                    <p className="text-center text-sm text-base-content/70">
+                    <p className="text-sm text-base-content/70 text-center">
                       {selectedBreed.name}の画像
                     </p>
                   </div>

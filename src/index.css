@@ -10,8 +10,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+* {
+  box-sizing: border-box;
+}
+
+html, body {
   margin: 0;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* スムーズスクロール */
+html {
+  scroll-behavior: smooth;
+}
+
+/* セレクション色のカスタマイズ */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: #1f2937;
+}
+
+::-moz-selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: #1f2937;
 }
