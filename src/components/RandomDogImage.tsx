@@ -3,17 +3,17 @@ import { DogApiService } from '../services/dogApi';
 import { useAppState } from '../hooks/useAppState';
 import { useFavorites } from '../hooks/useFavorites';
 import { Loading } from './Loading';
-import { FavoriteButton } from './FavoriteButton';
-import { NextImageButton } from './NextImageButton';
+import { DogImage } from './DogImage';
+import { ImageControls } from './ImageControls';
 import styles from '../styles/responsive.module.css';
-import type { DogImage } from '../types';
+import type { DogImage as DogImageType } from '../types';
 
 export const RandomDogImage: React.FC = () => {
   const { currentImage, setCurrentImage } = useAppState();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [localImage, setLocalImage] = useState<DogImage | null>(null);
+  const [localImage, setLocalImage] = useState<DogImageType | null>(null);
 
   const fetchRandomImage = useCallback(async () => {
     try {
@@ -108,31 +108,19 @@ export const RandomDogImage: React.FC = () => {
     <div className="max-w-2xl mx-auto">
       <div className={`${styles.card} bg-base-100 shadow-xl`}>
         <div className={`${styles.cardBody}`}>
-          <figure className={`${styles.imageContainer} mb-6`}>
-            <img
-              src={displayImage.url}
-              alt={displayImage.breed ? `${displayImage.breed}の犬` : '犬の画像'}
-              className={`${styles.dogImage} rounded-xl`}
-              onError={() => setError('画像の読み込みに失敗しました')}
-            />
-          </figure>
-          {displayImage.breed && (
-            <h2 className={`${styles.cardTitle} text-2xl capitalize mb-4`}>
-              {displayImage.breed.replace('/', ' - ')}
-            </h2>
-          )}
-          <div className={`${styles.modernButtonGroup} gap-3`}>
-            <NextImageButton
-              onClick={handleNewImage}
-              loading={loading}
-              variant="new"
-            />
-            <FavoriteButton
-              isFavorite={isImageFavorite}
-              onToggle={handleAddToFavorites}
-              disabled={loading}
-            />
-          </div>
+          <DogImage
+            image={displayImage}
+            loading={loading}
+          />
+          
+          <ImageControls
+            onNextImage={handleNewImage}
+            onAddToFavorites={handleAddToFavorites}
+            loading={loading}
+            canAddToFavorites={!!displayImage}
+            isFavorite={isImageFavorite}
+            variant="new"
+          />
         </div>
       </div>
     </div>

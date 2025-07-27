@@ -9,7 +9,8 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
   onAddToFavorites,
   loading = false,
   canAddToFavorites = true,
-  isFavorite = false
+  isFavorite = false,
+  variant = 'next'
 }) => {
 
   return (
@@ -18,7 +19,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
       <NextImageButton
         onClick={onNextImage}
         loading={loading}
-        variant="next"
+        variant={variant}
       />
 
       {/* Add to Favorites Button */}

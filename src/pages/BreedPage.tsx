@@ -70,15 +70,6 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
         }
     }, [currentImage, addToFavorites, removeFromFavorites, isFavorite]);
 
-    // Handle favorite toggle from DogImage component
-    const handleFavoriteToggle = useCallback((image: DogImageType) => {
-        if (isFavorite(image.id)) {
-            removeFromFavorites(image.id);
-        } else {
-            addToFavorites(image);
-        }
-    }, [addToFavorites, removeFromFavorites, isFavorite]);
-
     const isCurrentImageFavorite = currentImage ? isFavorite(currentImage.id) : false;
 
     return (
@@ -130,8 +121,6 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
                             <DogImage
                                 image={currentImage}
                                 loading={loading}
-                                onFavoriteToggle={handleFavoriteToggle}
-                                isFavorite={isCurrentImageFavorite}
                             />
 
                             {/* Image Controls */}

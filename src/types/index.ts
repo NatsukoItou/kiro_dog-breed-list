@@ -61,8 +61,6 @@ export interface BreedSelectorProps {
 export interface DogImageProps {
   image: DogImage | null;
   loading?: boolean;
-  onFavoriteToggle?: (image: DogImage) => void;
-  isFavorite?: boolean;
 }
 
 export interface ImageControlsProps {
@@ -71,6 +69,7 @@ export interface ImageControlsProps {
   loading?: boolean;
   canAddToFavorites?: boolean;
   isFavorite?: boolean;
+  variant?: 'next' | 'new';
 }
 
 export interface FavoritesListProps {
