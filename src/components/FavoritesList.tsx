@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo, useCallback } from 'react';
 import { FavoriteItem } from './FavoriteItem';
 import styles from '../styles/responsive.module.css';
 import type { FavoritesListProps } from '../types';
 
-export const FavoritesList: React.FC<FavoritesListProps> = ({
+export const FavoritesList: React.FC<FavoritesListProps> = memo(({
   favorites,
   onRemoveFavorite,
 }) => {
@@ -28,6 +28,11 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
 
     return groups;
   }, [sortedFavorites]);
+
+  // Memoized remove handler to prevent unnecessary re-renders
+  const handleRemoveFavorite = useCallback((imageId: string) => {
+    onRemoveFavorite(imageId);
+  }, [onRemoveFavorite]);
 
   if (favorites.length === 0) {
     return (
@@ -83,7 +88,7 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
               <FavoriteItem
                 key={favorite.id}
                 image={favorite}
-                onRemove={onRemoveFavorite}
+                onRemove={handleRemoveFavorite}
               />
             ))}
           </div>
@@ -91,4 +96,6 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
       ))}
     </div>
   );
-};
+});
+
+FavoritesList.displayName = 'FavoritesList';

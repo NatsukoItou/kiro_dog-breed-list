@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../styles/responsive.module.css';
 import type { ImageControlsProps } from '../types';
 import { FavoriteButton } from './FavoriteButton';
 import { NextImageButton } from './NextImageButton';
 
-export const ImageControls: React.FC<ImageControlsProps> = ({
+export const ImageControls: React.FC<ImageControlsProps> = memo(({
   onNextImage,
   onAddToFavorites,
   loading = false,
@@ -29,4 +29,6 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
       />
     </div>
   );
-};
+});
+
+ImageControls.displayName = 'ImageControls';
