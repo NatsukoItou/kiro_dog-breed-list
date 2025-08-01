@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { useAppState } from './useAppState';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
@@ -65,12 +65,16 @@ export function useFavorites(): UseFavoritesReturn {
     setStoredFavorites([]);
   }, [clearAllFromState, setStoredFavorites]);
 
-  // お気に入りかどうかをチェック
+  // お気に入りかどうかをチェック（メモ化でパフォーマンス向上）
+  const favoriteIds = useMemo(() => {
+    return new Set(favorites.map(fav => fav.id));
+  }, [favorites]);
+
   const isFavorite = useCallback(
     (imageId: string): boolean => {
-      return favorites.some((fav) => fav.id === imageId);
+      return favoriteIds.has(imageId);
     },
-    [favorites]
+    [favoriteIds]
   );
 
   return {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../styles/responsive.module.css';
 
 interface NextImageButtonProps {
@@ -10,7 +10,7 @@ interface NextImageButtonProps {
   className?: string;
 }
 
-export const NextImageButton: React.FC<NextImageButtonProps> = ({
+export const NextImageButton: React.FC<NextImageButtonProps> = memo(({
   onClick,
   loading = false,
   disabled = false,
@@ -70,4 +70,6 @@ export const NextImageButton: React.FC<NextImageButtonProps> = ({
       )}
     </button>
   );
-};
+});
+
+NextImageButton.displayName = 'NextImageButton';

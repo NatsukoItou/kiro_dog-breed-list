@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import type { DogImageProps } from '../types';
 import { Loading } from './Loading';
+import { LazyImage } from './LazyImage';
 import styles from '../styles/responsive.module.css';
 
-export const DogImage: React.FC<DogImageProps> = ({
+export const DogImage: React.FC<DogImageProps> = memo(({
   image,
   loading = false,
 }) => {
@@ -43,18 +44,20 @@ export const DogImage: React.FC<DogImageProps> = ({
     );
   }
 
+  const handleImageError = () => {
+    // エラー時のフォールバック処理は LazyImage コンポーネント内で処理される
+  };
+
   return (
     <div>
       <figure className={`${styles.imageContainer} mb-6`}>
-        <img
+        <LazyImage
           src={image.url}
           alt={image.breed ? `${image.breed}の画像` : '犬の画像'}
           className={`${styles.dogImage} rounded-xl`}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src =
-              'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuOCqOODqeODvOOBjOeZuueUn+OBl+OBvuOBl+OBnw==</text></svg>';
-          }}
+          onError={handleImageError}
+          rootMargin="100px"
+          threshold={0.1}
         />
       </figure>
 
@@ -70,4 +73,6 @@ export const DogImage: React.FC<DogImageProps> = ({
       </div>
     </div>
   );
-};
+});
+
+DogImage.displayName = 'DogImage';

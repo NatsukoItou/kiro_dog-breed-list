@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { DogApiService } from '../services/dogApi';
 import { useAppState } from '../hooks/useAppState';
 import { useFavorites } from '../hooks/useFavorites';
@@ -10,7 +10,7 @@ import { ImageErrorFallback } from './FallbackUI';
 import styles from '../styles/responsive.module.css';
 import type { DogImage as DogImageType } from '../types';
 
-export const RandomDogImage: React.FC = () => {
+export const RandomDogImage: React.FC = memo(() => {
   const { currentImage, setCurrentImage } = useAppState();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { showError, showSuccess } = useToast();
@@ -53,14 +53,15 @@ export const RandomDogImage: React.FC = () => {
     };
   }, [fetchRandomImage, localImage]); // 空の依存配列で一度だけ実行
 
-  const handleNewImage = () => {
+  const handleNewImage = useCallback(() => {
     fetchRandomImage();
-  };
+  }, [fetchRandomImage]);
 
   // 表示用の画像を決定（ローカル状態を優先）
   const displayImage = localImage || currentImage;
+  const isImageFavorite = isFavorite(displayImage?.id || '');
 
-  const handleAddToFavorites = () => {
+  const handleAddToFavorites = useCallback(() => {
     if (displayImage) {
       if (isImageFavorite) {
         removeFromFavorites(displayImage.id);
@@ -70,7 +71,7 @@ export const RandomDogImage: React.FC = () => {
         showSuccess('お気に入りに追加しました');
       }
     }
-  };
+  }, [displayImage, isImageFavorite, removeFromFavorites, addToFavorites, showSuccess]);
 
   if (loading) {
     return <Loading message="新しい犬の画像を取得中..." size="large" />;
@@ -91,7 +92,7 @@ export const RandomDogImage: React.FC = () => {
     );
   }
 
-  const isImageFavorite = isFavorite(displayImage.id);
+
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -111,4 +112,6 @@ export const RandomDogImage: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+RandomDogImage.displayName = 'RandomDogImage';

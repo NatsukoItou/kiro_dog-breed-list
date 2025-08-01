@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { DogBreed, DogImage } from '../types';
 import { DogApiService } from '../services/dogApi';
 import { Loading } from './Loading';
 import { NextImageButton } from './NextImageButton';
+import { LazyImage } from './LazyImage';
 import styles from '../styles/responsive.module.css';
 
 interface BreedSelectorProps {
@@ -13,7 +14,7 @@ interface BreedSelectorProps {
   onImageLoad?: (image: DogImage) => void;
 }
 
-export const BreedSelector: React.FC<BreedSelectorProps> = ({
+export const BreedSelector: React.FC<BreedSelectorProps> = memo(({
   breeds,
   loading,
   error,
@@ -26,15 +27,16 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
   const [imageError, setImageError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter breeds based on search term
-  const filteredBreeds = searchTerm
-    ? breeds.filter((breed) =>
-        breed.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : breeds;
+  // Filter breeds based on search term (memoized for performance)
+  const filteredBreeds = useMemo(() => {
+    if (!searchTerm) return breeds;
+    return breeds.filter((breed) =>
+      breed.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [breeds, searchTerm]);
 
-  // Load image when breed is selected
-  const loadBreedImage = async (breed: DogBreed) => {
+  // Load image when breed is selected (memoized callback)
+  const loadBreedImage = useCallback(async (breed: DogBreed) => {
     try {
       setImageLoading(true);
       setImageError(null);
@@ -51,28 +53,28 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
     } finally {
       setImageLoading(false);
     }
-  };
+  }, [onImageLoad]);
 
-  // Handle breed selection
-  const handleBreedSelect = (breed: DogBreed) => {
+  // Handle breed selection (memoized callback)
+  const handleBreedSelect = useCallback((breed: DogBreed) => {
     setSelectedBreed(breed);
     loadBreedImage(breed);
-  };
+  }, [loadBreedImage]);
 
-  // Handle next image button
-  const handleNextImage = () => {
+  // Handle next image button (memoized callback)
+  const handleNextImage = useCallback(() => {
     if (selectedBreed) {
       loadBreedImage(selectedBreed);
     }
-  };
+  }, [selectedBreed, loadBreedImage]);
 
-  // Reset selection
-  const handleReset = () => {
+  // Reset selection (memoized callback)
+  const handleReset = useCallback(() => {
     setSelectedBreed(null);
     setCurrentImage(null);
     setImageError(null);
     setSearchTerm('');
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -259,13 +261,15 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
               {currentImage && !imageLoading && !imageError && (
                 <div className="card bg-base-200 shadow-lg max-w-md">
                   <figure className="p-4">
-                    <img
+                    <LazyImage
                       src={currentImage.url}
                       alt={`${selectedBreed.name}の画像`}
                       className="w-full h-64 object-cover rounded-lg"
                       onError={() =>
                         setImageError('画像の読み込みに失敗しました')
                       }
+                      rootMargin="50px"
+                      threshold={0.1}
                     />
                   </figure>
                   <div className="card-body pt-2">
@@ -281,4 +285,6 @@ export const BreedSelector: React.FC<BreedSelectorProps> = ({
       </div>
     </div>
   );
-};
+});
+
+BreedSelector.displayName = 'BreedSelector';

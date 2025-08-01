@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from '../styles/responsive.module.css';
 
 interface FavoriteButtonProps {
@@ -10,7 +10,7 @@ interface FavoriteButtonProps {
   className?: string;
 }
 
-export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
+export const FavoriteButton: React.FC<FavoriteButtonProps> = memo(({
   isFavorite,
   onToggle,
   disabled = false,
@@ -54,4 +54,6 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
       )}
     </button>
   );
-};
+});
+
+FavoriteButton.displayName = 'FavoriteButton';

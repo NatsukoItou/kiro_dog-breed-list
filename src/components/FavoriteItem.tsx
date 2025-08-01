@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, memo } from 'react';
 import { useIsMobile } from '../hooks/useResponsive';
+import { LazyImage } from './LazyImage';
 import styles from '../styles/responsive.module.css';
 import type { FavoriteItemProps } from '../types';
 
-export const FavoriteItem: React.FC<FavoriteItemProps> = ({
+export const FavoriteItem: React.FC<FavoriteItemProps> = memo(({
   image,
   onRemove,
 }) => {
@@ -27,11 +28,12 @@ export const FavoriteItem: React.FC<FavoriteItemProps> = ({
       className={`${styles.favoriteItem} ${styles.card} bg-base-100 shadow-md hover:shadow-lg transition-shadow`}
     >
       <div className={`${styles.favoriteImageContainer}`}>
-        <img
+        <LazyImage
           src={image.url}
           alt={image.breed ? `${image.breed}の画像` : '犬の画像'}
           className={`${styles.favoriteImage} rounded-xl object-cover`}
-          loading="lazy"
+          rootMargin="200px"
+          threshold={0.1}
         />
       </div>
 
@@ -100,4 +102,6 @@ export const FavoriteItem: React.FC<FavoriteItemProps> = ({
       </div>
     </div>
   );
-};
+});
+
+FavoriteItem.displayName = 'FavoriteItem';
