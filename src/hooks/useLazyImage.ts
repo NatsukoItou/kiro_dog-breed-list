@@ -29,6 +29,7 @@ export function useLazyImage({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
+  const [retryCounter, setRetryCounter] = useState(0);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   // Intersection Observer の設定
@@ -88,11 +89,11 @@ export function useLazyImage({
       img.onload = null;
       img.onerror = null;
     };
-  }, [shouldLoad, src]);
+  }, [shouldLoad, src, retryCounter]);
 
   const retry = useCallback(() => {
     setIsError(false);
-    setShouldLoad(true);
+    setRetryCounter((c) => c + 1);
   }, []);
 
   return {
