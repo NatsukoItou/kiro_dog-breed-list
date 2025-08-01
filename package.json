@@ -14,7 +14,12 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run src/__tests__/integration.test.tsx",
+    "test:e2e": "vitest run src/__tests__/e2e.test.tsx",
+    "test:responsive": "vitest run src/__tests__/responsive.test.tsx",
+    "test:cross-browser": "vitest run src/__tests__/cross-browser.test.tsx",
+    "test:final": "vitest run src/__tests__/integration.test.tsx src/__tests__/e2e.test.tsx src/__tests__/responsive.test.tsx src/__tests__/cross-browser.test.tsx"
   },
   "dependencies": {
     "react": "^19.1.0",

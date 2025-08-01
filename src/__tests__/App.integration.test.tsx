@@ -1,4 +1,6 @@
+import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import { DogApiService } from '../services/dogApi'
 import { AppProvider } from '../context/AppContext'
 import { ToastProvider } from '../context/ToastContext'
@@ -10,11 +12,13 @@ vi.mock('../services/dogApi')
 const mockDogApiService = vi.mocked(DogApiService)
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-    <AppProvider>
-        <ToastProvider>
-            {children}
-        </ToastProvider>
-    </AppProvider>
+    <BrowserRouter>
+        <AppProvider>
+            <ToastProvider>
+                {children}
+            </ToastProvider>
+        </AppProvider>
+    </BrowserRouter>
 )
 
 describe('App Integration Tests', () => {
@@ -46,10 +50,10 @@ describe('App Integration Tests', () => {
         )
 
         // ページタイトルが表示される
-        expect(screen.getByText('🐕 ランダムな犬の画像')).toBeInTheDocument()
+        expect(screen.getByText('おすすめの犬画像')).toBeInTheDocument()
 
         // 犬種選択セクションが表示される
-        expect(screen.getByText('犬種を選択')).toBeInTheDocument()
+        expect(screen.getByText('犬種から選ぶ')).toBeInTheDocument()
     })
 
     it('APIサービスが正しく呼び出される', () => {
@@ -76,6 +80,6 @@ describe('App Integration Tests', () => {
         )
 
         // コンポーネントがクラッシュしないことを確認
-        expect(screen.getByText('🐕 ランダムな犬の画像')).toBeInTheDocument()
+        expect(screen.getByText('おすすめの犬画像')).toBeInTheDocument()
     })
 })
