@@ -7,9 +7,11 @@ import {
 } from 'react-router-dom';
 import { DogImage } from '../components/DogImage';
 import { ImageControls } from '../components/ImageControls';
+import { ImageErrorFallback } from '../components/FallbackUI';
 import { DogApiService } from '../services/dogApi';
 import { useFavorites } from '../hooks/useFavorites';
 import { useDogBreeds } from '../hooks/useDogBreeds';
+import { useToast } from '../hooks/useToast';
 import styles from '../styles/responsive.module.css';
 import type { DogImage as DogImageType } from '../types';
 
@@ -31,6 +33,7 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
 
   const { favorites, addToFavorites, removeFromFavorites, isFavorite } =
     useFavorites();
+  const { showError, showSuccess } = useToast();
 
   // Load a new image for the selected breed
   const loadBreedImage = useCallback(async () => {
@@ -56,10 +59,11 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
           : `${breedName}の画像取得に失敗しました`;
       setError(errorMessage);
       setCurrentImage(null);
+      showError('画像取得エラー', errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [breedId, breedName]);
+  }, [breedId, breedName, showError]);
 
   // Load initial image when component mounts or breed changes
   useEffect(() => {
@@ -76,11 +80,19 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
     if (currentImage) {
       if (isFavorite(currentImage.id)) {
         removeFromFavorites(currentImage.id);
+        showSuccess('お気に入りから削除しました');
       } else {
         addToFavorites(currentImage);
+        showSuccess('お気に入りに追加しました');
       }
     }
-  }, [currentImage, addToFavorites, removeFromFavorites, isFavorite]);
+  }, [
+    currentImage,
+    addToFavorites,
+    removeFromFavorites,
+    isFavorite,
+    showSuccess,
+  ]);
 
   const isCurrentImageFavorite = currentImage
     ? isFavorite(currentImage.id)
@@ -126,30 +138,8 @@ const BreedPageContent: React.FC<BreedPageContentProps> = ({
 
       {/* Error display */}
       {error && (
-        <div className="alert alert-error mb-8">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <div>
-            <div className="font-bold">エラーが発生しました</div>
-            <div className="text-xs">{error}</div>
-          </div>
-          <button
-            onClick={loadBreedImage}
-            className="btn btn-lg btn-outline shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            再試行
-          </button>
+        <div className="mb-8">
+          <ImageErrorFallback onRetry={loadBreedImage} breed={breedName} />
         </div>
       )}
 

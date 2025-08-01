@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { FavoritesList } from '../components/FavoritesList';
+import { EmptyFavoritesUI } from '../components/FallbackUI';
 import { useFavorites } from '../hooks/useFavorites';
+import { useToast } from '../hooks/useToast';
 import { useIsMobile } from '../hooks/useResponsive';
 import styles from '../styles/responsive.module.css';
 
@@ -10,6 +12,7 @@ export const FavoritesPage: React.FC = () => {
     removeFromFavorites,
     clearAllFavorites: clearAll,
   } = useFavorites();
+  const { showSuccess, showInfo } = useToast();
   const [showConfirmDialog, setShowConfirmDialog] = useState<string | null>(
     null
   );
@@ -18,8 +21,9 @@ export const FavoritesPage: React.FC = () => {
   const handleRemoveFavorite = useCallback(
     (imageId: string) => {
       removeFromFavorites(imageId);
+      showSuccess('お気に入りから削除しました');
     },
-    [removeFromFavorites]
+    [removeFromFavorites, showSuccess]
   );
 
   const confirmRemove = useCallback(() => {
@@ -40,9 +44,10 @@ export const FavoritesPage: React.FC = () => {
       );
       if (confirmed) {
         clearAll();
+        showInfo('すべてのお気に入りを削除しました');
       }
     }
-  }, [favorites.length, clearAll]);
+  }, [favorites.length, clearAll, showInfo]);
 
   return (
     <div className={`${styles.container} ${styles.main}`}>
@@ -89,10 +94,14 @@ export const FavoritesPage: React.FC = () => {
       </div>
 
       {/* Main content */}
-      <FavoritesList
-        favorites={favorites}
-        onRemoveFavorite={handleRemoveFavorite}
-      />
+      {favorites.length === 0 ? (
+        <EmptyFavoritesUI />
+      ) : (
+        <FavoritesList
+          favorites={favorites}
+          onRemoveFavorite={handleRemoveFavorite}
+        />
+      )}
 
       {/* Confirmation Dialog */}
       {showConfirmDialog && (

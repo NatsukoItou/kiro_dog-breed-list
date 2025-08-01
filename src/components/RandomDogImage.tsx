@@ -2,15 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { DogApiService } from '../services/dogApi';
 import { useAppState } from '../hooks/useAppState';
 import { useFavorites } from '../hooks/useFavorites';
+import { useToast } from '../hooks/useToast';
 import { Loading } from './Loading';
 import { DogImage } from './DogImage';
 import { ImageControls } from './ImageControls';
+import { ImageErrorFallback } from './FallbackUI';
 import styles from '../styles/responsive.module.css';
 import type { DogImage as DogImageType } from '../types';
 
 export const RandomDogImage: React.FC = () => {
   const { currentImage, setCurrentImage } = useAppState();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const { showError, showSuccess } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [localImage, setLocalImage] = useState<DogImageType | null>(null);
@@ -27,10 +30,11 @@ export const RandomDogImage: React.FC = () => {
       const errorMessage =
         err instanceof Error ? err.message : 'ランダム画像の取得に失敗しました';
       setError(errorMessage);
+      showError('画像取得エラー', errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [setCurrentImage]);
+  }, [setCurrentImage, showError]);
 
   // 初回ロード時にランダム画像を取得（一度だけ実行）
   useEffect(() => {
@@ -60,8 +64,10 @@ export const RandomDogImage: React.FC = () => {
     if (displayImage) {
       if (isImageFavorite) {
         removeFromFavorites(displayImage.id);
+        showSuccess('お気に入りから削除しました');
       } else {
         addToFavorites(displayImage);
+        showSuccess('お気に入りに追加しました');
       }
     }
   };
@@ -71,29 +77,7 @@ export const RandomDogImage: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="text-center p-8">
-        <div className="alert alert-error max-w-md mx-auto">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>{error}</span>
-        </div>
-        <button className="btn btn-primary mt-4" onClick={handleNewImage}>
-          再試行
-        </button>
-      </div>
-    );
+    return <ImageErrorFallback onRetry={handleNewImage} />;
   }
 
   if (!displayImage) {
