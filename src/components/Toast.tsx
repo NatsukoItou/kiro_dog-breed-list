@@ -27,6 +27,13 @@ function Toast({ toast, onClose }: ToastProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onClose(toast.id);
+    }, 300); // アニメーション時間
+  }, [onClose, toast.id]);
+
   useEffect(() => {
     // マウント時にアニメーション開始
     const timer = setTimeout(() => setIsVisible(true), 10);
@@ -42,13 +49,6 @@ function Toast({ toast, onClose }: ToastProps) {
       return () => clearTimeout(timer);
     }
   }, [toast.duration, handleClose]);
-
-  const handleClose = useCallback(() => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onClose(toast.id);
-    }, 300); // アニメーション時間
-  }, [onClose, toast.id]);
 
   const getToastStyles = () => {
     const baseStyles =

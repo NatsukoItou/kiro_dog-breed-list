@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { ToastContainer } from '../components/Toast';
-import type { ToastMessage } from '../components/Toast';
+import type { ToastMessage, ToastType } from '../components/Toast';
 import { ToastContext } from './ToastContextDefinition';
 import type { ToastContextType } from './ToastContextDefinition';
 
